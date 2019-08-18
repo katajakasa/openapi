@@ -23,6 +23,18 @@ except DistributionNotFound:
 
 
 def setup(app):
+    from sphinxcontrib import httpdomain
+
+    for idx, fieldtype in enumerate(httpdomain.HTTPResource.doc_field_types):
+        if fieldtype.name == 'requestheader':
+            httpdomain.HTTPResource.doc_field_types[idx] = httpdomain.TypedField(
+                fieldtype.name,
+                label=fieldtype.label,
+                names=fieldtype.names,
+                typerolename='header',
+                typenames=('reqheadertype', ),
+            )
+
     app.setup_extension('sphinxcontrib.httpdomain')
     app.add_directive('openapi', directive.OpenApi)
 
